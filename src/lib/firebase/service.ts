@@ -76,3 +76,21 @@ export async function signUp(
 
   return data;
 }
+
+export async function signIn(email: string) {
+  // ambil semua data dari collection berdasarkan email
+  const q = query(collection(firestore, "users"), where("email", "==", email));
+
+  const snapshot = await getDocs(q);
+  const data = snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+
+  // jika ada data
+  if (data) {
+    return data[0]; // kembalikan data pertama
+  } else {
+    return null;
+  }
+}
