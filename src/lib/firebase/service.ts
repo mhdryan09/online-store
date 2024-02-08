@@ -9,7 +9,6 @@ import {
   where,
 } from "firebase/firestore";
 import app from "./init";
-import bcrypt from "bcrypt";
 
 const firestore = getFirestore(app);
 
@@ -31,91 +30,36 @@ export async function retrieveDataById(collectionName: string, id: string) {
   return data;
 }
 
-export async function signUp(
-  userData: {
-    email: string;
-    fullname: string;
-    password: string;
-    phone: string;
-    role?: string;
-  },
-  callback: Function
+export async function retrieveDataByField(
+  collectionName: string,
+  field: string,
+  value: string
 ) {
+  // ambil semua data dari collection berdasarkan email
   const q = query(
-    collection(firestore, "users"),
-    where("email", "==", userData.email)
+    collection(firestore, collectionName),
+    where(field, "==", value)
   );
+
   const snapshot = await getDocs(q);
   const data = snapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
   }));
-
-  // sudah ada data?
-  if (data.length > 0) {
-    callback(false);
-  } else {
-    // jika role belum ada, set jadi member
-    if (!userData.role) {
-      userData.role = "member";
-    }
-
-    // hash password user
-    userData.password = await bcrypt.hash(userData.password, 10);
-
-    // masukan data ke firebase
-    await addDoc(collection(firestore, "users"), userData)
-      .then(() => {
-        callback(true);
-      })
-      .catch((error) => {
-        callback(false);
-        console.log(error);
-      });
-  }
-
   return data;
 }
 
-export async function signIn(email: string) {
-  // ambil semua data dari collection berdasarkan email
-  const q = query(collection(firestore, "users"), where("email", "==", email));
-
-  const snapshot = await getDocs(q);
-  const data = snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
-
-  // jika ada data
-  if (data) {
-    return data[0]; // kembalikan data pertama
-  } else {
-    return null;
-  }
-}
-
-export async function loginWithGoogle(data: any, callback: Function) {
-  const q = query(
-    collection(firestore, "users"),
-    where("email", "==", data.email)
-  );
-
-  const snapshot = await getDocs(q);
-  const user = snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
-
-  // jika ada user
-  if (user.length > 0) {
-    callback(user[0]); // kembalikan user yang ditemukan
-  } else {
-    data.role = "member";
-
-    // masukan data ke firebase
-    await addDoc(collection(firestore, "users"), data).then(() => {
-      callback(data); // kembalikan user yang baru ditambah
+export async function addData(
+  collectionName: string,
+  data: any,
+  callback: Function
+) {
+  // masukan data ke firebase
+  await addDoc(collection(firestore, collectionName), data)
+    .then(() => {
+      callback(true);
+    })
+    .catch(() => {
+      callback(false);
     });
-  }
 }

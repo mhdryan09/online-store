@@ -2,6 +2,8 @@ import Link from "next/link";
 import styles from "./Register.module.scss";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
+import Input from "@/components/ui/Input";
+import Button from "@/components/ui/Button";
 
 const RegisterView = () => {
   const { push } = useRouter();
@@ -47,51 +49,15 @@ const RegisterView = () => {
 
       <div className={styles.register__form}>
         <form action="" onSubmit={handleSubmit}>
-          <div className={styles.register__form__item}>
-            <label htmlFor="fullname">Fullname</label>
-            <input
-              name="fullname"
-              id="fullname"
-              type="text"
-              className={styles.register__form__item__input}
-            />
-          </div>
-
-          <div className={styles.register__form__item}>
-            <label htmlFor="email">Email</label>
-            <input
-              name="email"
-              id="email"
-              type="email"
-              className={styles.register__form__item__input}
-            />
-          </div>
-
-          <div className={styles.register__form__item}>
-            <label htmlFor="password">Password</label>
-            <input
-              name="password"
-              id="password"
-              type="password"
-              className={styles.register__form__item__input}
-            />
-          </div>
-
-          <div className={styles.register__form__item}>
-            <label htmlFor="phone">Phone Number</label>
-            <input
-              name="phone"
-              id="phone"
-              type="text"
-              className={styles.register__form__item__input}
-            />
-          </div>
-          <button type="submit" className={styles.register__form__button}>
+          <Input label="Email" name="email" type="email" />
+          <Input label="Full Name" name="fullname" type="text" />
+          <Input label="Phone Number" name="phone" type="text" />
+          <Input label="Password" name="password" type="password" />
+          <Button type="submit" className={styles.register__form__button}>
             {isLoading ? "Loading..." : "Register"}
-          </button>
+          </Button>
         </form>
       </div>
-
       <p className={styles.register__link}>
         Have an account? Sign in <Link href="/auth/login">here</Link>
       </p>
