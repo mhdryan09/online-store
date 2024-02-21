@@ -7,6 +7,7 @@ import {
   getFirestore,
   query,
   where,
+  updateDoc,
 } from "firebase/firestore";
 import app from "./init";
 
@@ -56,6 +57,25 @@ export async function addData(
 ) {
   // masukan data ke firebase
   await addDoc(collection(firestore, collectionName), data)
+    .then(() => {
+      callback(true);
+    })
+    .catch(() => {
+      callback(false);
+    });
+}
+
+export async function updateData(
+  collectionName: string,
+  id: string,
+  data: any,
+  callback: Function
+) {
+  // referensi ke collection dengan id diberikan dari param
+  const docRef = doc(firestore, collectionName, id);
+
+  // update data dengan id yang diberikan
+  await updateDoc(docRef, data)
     .then(() => {
       callback(true);
     })

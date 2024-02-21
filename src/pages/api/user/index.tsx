@@ -1,4 +1,4 @@
-import { retrieveData } from "@/lib/firebase/service";
+import { retrieveData, updateData } from "@/lib/firebase/service";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -19,6 +19,25 @@ export default async function handler(
       statusCode: 200,
       message: "Get User Success",
       data: data,
+    });
+  } else if (req.method === "PUT") {
+    const { id, data } = req.body; // get id and data from request body
+
+    // update data
+    await updateData("users", id, data, (result: boolean) => {
+      if (result) {
+        res.status(200).json({
+          status: true,
+          statusCode: 200,
+          message: "Update User Success",
+        });
+      } else {
+        res.status(400).json({
+          status: false,
+          statusCode: 400,
+          message: "Update User Failed",
+        });
+      }
     });
   }
 }

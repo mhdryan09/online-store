@@ -6,8 +6,18 @@ type Propstypes = {
   name: string;
   type: string;
   placeholder?: string;
+  defaultValue?: string;
+  disabled?: boolean;
 };
-const Input = ({ label, name, type, placeholder }: Propstypes) => {
+
+const Input = ({
+  label,
+  name,
+  type,
+  placeholder,
+  defaultValue,
+  disabled,
+}: Propstypes) => {
   return (
     <div className={styles.container}>
       {label && <label htmlFor={name}>{label}</label>}
@@ -17,6 +27,8 @@ const Input = ({ label, name, type, placeholder }: Propstypes) => {
         type={type}
         className={styles.container__input}
         placeholder={placeholder}
+        defaultValue={defaultValue}
+        disabled={disabled}
       />
     </div>
   );
