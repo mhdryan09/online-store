@@ -8,6 +8,7 @@ import {
   query,
   where,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import app from "./init";
 
@@ -36,7 +37,7 @@ export async function retrieveDataByField(
   field: string,
   value: string
 ) {
-  // ambil semua data dari collection berdasarkan email
+  // ambil semua data dari collection
   const q = query(
     collection(firestore, collectionName),
     where(field, "==", value)
@@ -76,6 +77,21 @@ export async function updateData(
 
   // update data dengan id yang diberikan
   await updateDoc(docRef, data)
+    .then(() => {
+      callback(true);
+    })
+    .catch(() => {
+      callback(false);
+    });
+}
+
+export async function deleteData(
+  collectionName: string,
+  id: string,
+  callback: Function
+) {
+  const docRef = doc(firestore, collectionName, id);
+  await deleteDoc(docRef)
     .then(() => {
       callback(true);
     })

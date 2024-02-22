@@ -3,6 +3,7 @@ import Button from "@/components/ui/Button";
 import styles from "./Users.module.scss";
 import { useEffect, useState } from "react";
 import ModalUpdateUser from "./ModalUpdateUser";
+import ModalDeleteUser from "./ModalDeleteUser";
 
 type PropTypes = {
   users: any;
@@ -11,6 +12,7 @@ type PropTypes = {
 const UsersAdminView = ({ users }: PropTypes) => {
   const [updatedUser, setUpdatedUser] = useState<any>({});
   const [usersData, setUsersData] = useState([]);
+  const [deletedUser, setDeletedUser] = useState([]);
 
   useEffect(() => {
     setUsersData(users); // set users data to state
@@ -52,6 +54,7 @@ const UsersAdminView = ({ users }: PropTypes) => {
                       <Button
                         type="button"
                         className={styles.users__table__action__delete}
+                        onClick={() => setDeletedUser(user)}
                       >
                         <i className="bx bxs-trash" />
                       </Button>
@@ -67,6 +70,14 @@ const UsersAdminView = ({ users }: PropTypes) => {
         <ModalUpdateUser
           updatedUser={updatedUser}
           setUpdatedUser={setUpdatedUser}
+          setUsersData={setUsersData}
+        />
+      ) : null}
+
+      {Object.keys(deletedUser).length > 0 ? (
+        <ModalDeleteUser
+          deletedUser={deletedUser}
+          setDeletedUser={setDeletedUser}
           setUsersData={setUsersData}
         />
       ) : null}

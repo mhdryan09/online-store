@@ -1,4 +1,4 @@
-import { retrieveData, updateData } from "@/lib/firebase/service";
+import { deleteData, retrieveData, updateData } from "@/lib/firebase/service";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -36,6 +36,24 @@ export default async function handler(
           status: false,
           statusCode: 400,
           message: "Update User Failed",
+        });
+      }
+    });
+  } else if (req.method === "DELETE") {
+    const { user }: any = req.query;
+    // jalankan delete data dari service firebase
+    await deleteData("users", user[1], (result: boolean) => {
+      if (result) {
+        res.status(200).json({
+          status: true,
+          statusCode: 200,
+          message: "Delete User Success",
+        });
+      } else {
+        res.status(400).json({
+          status: false,
+          statusCode: 400,
+          message: "Delete User Failed",
         });
       }
     });
