@@ -50,6 +50,7 @@ const LoginView = () => {
     <AuthLayout
       title="Login"
       link="/auth/register"
+      error={error}
       linkText="Don't have an account? Sign Up"
     >
       <form action="" onSubmit={handleSubmit}>
