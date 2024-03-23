@@ -13,7 +13,7 @@ const lato = Lato({
   display: "swap",
 });
 
-const disableNavbar = ["auth", "admin"];
+const disableNavbar = ["auth", "admin", "member"];
 
 export default function App({
   Component,

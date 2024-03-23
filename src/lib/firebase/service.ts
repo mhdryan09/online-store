@@ -58,8 +58,8 @@ export async function addData(
 ) {
   // masukan data ke firebase
   await addDoc(collection(firestore, collectionName), data)
-    .then(() => {
-      callback(true);
+    .then((res) => {
+      callback(true, res);
     })
     .catch(() => {
       callback(false);
